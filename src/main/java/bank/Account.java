@@ -1,5 +1,9 @@
 package bank;
 
+import javax.xml.crypto.Data;
+
+import bank.Exceptions.AmountException;
+
 public class Account {
   private int id;
   private String type;
@@ -35,10 +39,26 @@ public class Account {
     this.balance = balance;
   }
 
-  public void deposit(Double amount){
-
+  public void deposit(double amount) throws AmountException{
+   if (amount < 1){
+    throw new AmountException("Amount can not be less than 1 Rupees.");
+   }
+   else {
+    double newBalance = balance + amount;
+    this.setBalance(newBalance);
+    DataSource.updateBalance(id, newBalance);
+   }
   }
-  public void withdraw(Double amount){
-    
-  }
+  public void withdraw(double amount) throws AmountException{
+    if (amount < 0){
+      throw new AmountException("Enter amount greater than 0")
+    }
+    else if(amount > getBalance()){
+      throw new AmountException("You do not have sufficient funds");
+    }
+    else{
+      double newbalance = balance - amount;
+      setBalance(newbalance);
+      DataSource.updateBalance(id, newbalance);
+    }
 }

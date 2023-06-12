@@ -3,7 +3,9 @@ package bank;
 import java.util.Scanner;
 
 import javax.security.auth.login.LoginException;
-import javax.xml.crypto.Data;
+
+
+import bank.Exceptions.AmountException;
 
 public class Menu {
   private Scanner scanner;
@@ -44,10 +46,6 @@ public class Menu {
     return customer;
   }
 
-  /**
-   * @param customer
-   * @param account
-   */
   private void showMenu(Customer customer, Account account){
     int selection = 0;
     while( selection !=4 && customer.isAuthenticated() ){
@@ -66,13 +64,23 @@ public class Menu {
       case 1:
       System.out.println("How much would you like to deposit?");
       amount = scanner.nextDouble();
+      try{
       account.deposit(amount);
+      }
+      catch(AmountException e){
+       System.out.println("Enter valid amount: " + e.getMessage());
+      }
       break;
 
       case 2:
       System.out.println("How much would you like to withdraw?");
       amount = scanner.nextDouble();
+      try{
       account.withdraw(amount);
+      }
+      catch(AmountException e){
+        System.out.println(e.getMessage());
+      }
       break;
 
       case 3:

@@ -12,7 +12,7 @@ public class DataSource {
   String db_file = "jdbc:sqlite:resources/bank.db";
   Connection connection = null;
 
-  
+
 
   try{
     connection = DriverManager.getConnection(db_file);
@@ -50,6 +50,25 @@ public static Customer getCustomer(String username){
   return customer;
 }
 
+public static void updateBalance (int accountId, double balance){
+  String sql = "update Accounts set balance ? where id = ? ";
+
+  try(
+    Connection connection = connect();
+    PreparedStatement statement = connection.prepareStatement(sql);
+   
+  ){
+     statement.setDouble(1 , balance);
+     statement.setInt(2, accountId);
+     System.out.println(statement);
+     statement.executeUpdate();
+  }
+catch(SQLException e){
+e.printStackTrace();
+}
+
+}
+
 public static Account getAccount(int account_id){
   String sql = "Select * from Accounts where id = ?";
   Account account = null;
@@ -69,13 +88,4 @@ public static Account getAccount(int account_id){
 return account;
 }
 
-public static void main(String args[]){
-
-Customer customer = getCustomer("oleevesmc@naver.com");
-System.out.println(customer.getName());
-System.out.println(customer.getId());
-
-Account account = getAccount(14645);
-System.out.println(account.getBalance());
-}
 }
